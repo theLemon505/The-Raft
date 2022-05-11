@@ -1,0 +1,29 @@
+import sys
+import os
+dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(dir + "/Source/Graphics/Runtime")
+
+from .render_object import RenderObject
+from .render_object import RenderData
+from .render_object import RenderShader
+
+class Eye:
+    pass
+
+class Character:
+    def __init__(self):
+        render_shader = RenderShader("../../../External/Shaders/object_v.glsl", "../../../External/Shaders/object_f.glsl")
+        render_data = RenderData([], 0, 0)
+        self.render_object = RenderObject()
+        self.render_object.upload_data(render_data)
+        self.render_object.upload_shader(render_shader)
+        self.render_object.prepare()
+
+    def loop(self):
+        pass
+
+    def render(self):
+        self.render_object.render()
+
+    def end(self):
+        self.render_object.destroy()
