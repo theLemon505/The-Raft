@@ -1,5 +1,5 @@
 import os
-import sys
+import numpy as np
 
 dir = os.path.dirname(os.path.abspath("main.py"))
 
@@ -10,13 +10,20 @@ class Triangle:
         print(dir)
         self.vertices = (
             -1, -1, 0,
-            0, 0, 0,
-            1, -1, 0
+            1, -1, 0,
+            -1, 1, 0,
+            1, 1, 0
         )
-        data = RenderData(self.vertices, 3)
+        self.indices = (
+            0, 1, 2,
+            1, 2, 3
+        )
+        vertex_data = RenderData(self.vertices, 3, np.float32)
+        index_data = RenderData(self.indices, 3, np.uint32)
         shader = RenderShader(dir + "\External\Shaders\object_v.glsl", dir + "\\External\Shaders\object_f.glsl")
         self.render_object = RenderObject()
-        self.render_object.upload_data(data)
+        self.render_object.upload_data(vertex_data)
+        self.render_object.upload_data(index_data)
         self.render_object.upload_shader(shader)
 
     def prepare(self):

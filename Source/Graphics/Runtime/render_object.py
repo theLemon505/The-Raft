@@ -20,9 +20,9 @@ class RenderShader:
         )
 
 class RenderData:
-    def __init__(self, data_array, size):
+    def __init__(self, data_array, size, type):
         self.size = size
-        self.data_array = data_array
+        self.data_array = np.array(data_array, type)
         self.data_count = len(data_array) / size
 
 class RenderObject:
@@ -33,12 +33,18 @@ class RenderObject:
         glBindVertexArray(self.vao)  
     
     def upload_data(self, data: RenderData):
-        vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, vbo)
-        array_buffer = (ctypes.c_float*len(data.data_array))(*data.data_array)
-        glBufferData(GL_ARRAY_BUFFER, len(data.data_array) * 4, array_buffer, GL_STATIC_DRAW)
-        self.vbos[self.attribs] = data
-        self.attribs += 1
+        if self.attribs == 1:
+            vbo = glGenBuffers(1)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo)
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.data_array.nbytes, data.data_array, GL_STATIC_DRAW)
+            self.vbos[self.attribs] = data
+            self.attribs += 1
+        else:
+            vbo = glGenBuffers(1)
+            glBindBuffer(GL_ARRAY_BUFFER, vbo)
+            glBufferData(GL_ARRAY_BUFFER, data.data_array.nbytes, data.data_array, GL_STATIC_DRAW)
+            self.vbos[self.attribs] = data
+            self.attribs += 1
 
     def upload_shader(self, shader: RenderShader):
         self.shader = shader
@@ -47,18 +53,19 @@ class RenderObject:
         glUseProgram(self.shader.program)
 
     def render(self):
+        glBindVertexArray(self.vao)
         for attrib in range(self.attribs):
             glEnableVertexAttribArray(attrib)
             glVertexAttribPointer(attrib, self.vbos[attrib].size, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(0))
+
         glClear(GL_COLOR_BUFFER_BIT)
 
         glUseProgram(self.shader.program)
-        glBindVertexArray(self.vao)
-        glDrawArrays(GL_TRIANGLES, 0, int(self.vbos[0].data_count))
-        glBindVertexArray(0)
+        glDrawElements(GL_TRIANGLES, int(self.vbos[0].data_count), GL_UNSIGNED_INT, None)
 
         for attrib in range(self.attribs):
             glDisableVertexAttribArray(attrib)
+        glBindVertexArray(0)
 
         pg.display.flip()
 
