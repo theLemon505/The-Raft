@@ -1,4 +1,5 @@
 from random import triangular
+from sqlite3 import Time
 from unittest import runner
 import pygame as pg
 
@@ -21,6 +22,7 @@ class Display:
     def loop(self):
         while(self.running):
             self.tri.render()
+            
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False

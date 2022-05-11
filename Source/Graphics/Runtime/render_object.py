@@ -30,7 +30,7 @@ class RenderObject:
         self.vao = glGenVertexArrays(1)
         self.vbos = {}
         self.attribs = 0
-        glBindVertexArray(self.vao)
+        glBindVertexArray(self.vao)  
     
     def upload_data(self, data: RenderData):
         vbo = glGenBuffers(1)
@@ -63,5 +63,6 @@ class RenderObject:
         pg.display.flip()
 
     def destroy(self):
+        glDeleteProgram(self.shader.program)
         for vbo in self.vbos:
             glDeleteBuffers(1, vbo)
