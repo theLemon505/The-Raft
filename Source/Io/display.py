@@ -3,7 +3,7 @@ from sqlite3 import Time
 from unittest import runner
 import pygame as pg
 
-from Source.Test.triangle import Triangle
+from Source.Test.test_mesh import TestMesh
 
 class Display:
     def __init__(self, width, height, title):
@@ -16,7 +16,7 @@ class Display:
         self.loop()
 
     def init(self):
-        self.tri = Triangle()
+        self.tri = TestMesh()
         self.tri.prepare()
 
     def loop(self):

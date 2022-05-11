@@ -1,6 +1,6 @@
-#version 330 core
+#version 410
 
-layout (location=0) in vec3 vertexPosition;
+in vec3 vertexPosition;
 
 out vec3 p_color;
 

@@ -14,6 +14,8 @@ class RenderShader:
         with open(fragment_path, "r") as f:
             self.fragment_src = f.readlines()
 
+        print(self.vertex_src)
+
         self.program = compileProgram(
             compileShader(self.vertex_src, GL_VERTEX_SHADER),
             compileShader(self.fragment_src, GL_FRAGMENT_SHADER)
