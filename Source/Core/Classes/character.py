@@ -12,7 +12,7 @@ class Eye:
 
 class Character:
     def __init__(self):
-        render_shader = RenderShader("../../../External/Shaders/object_v.glsl", "../../../External/Shaders/object_f.glsl")
+        render_shader = RenderShader(dir + "/External/Shaders/object_v.glsl", dir + "/External/Shaders/object_f.glsl")
         render_data = RenderData([], 0, 0)
         self.render_object = RenderObject()
         self.render_object.upload_data(render_data)
