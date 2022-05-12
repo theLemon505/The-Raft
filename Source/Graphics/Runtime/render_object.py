@@ -1,7 +1,7 @@
 from array import array
 import ctypes
 import numpy as np
-import pygame as pg
+import glfw
 from sys import getsizeof
 from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
@@ -66,15 +66,13 @@ class RenderObject:
         glClear(GL_COLOR_BUFFER_BIT)
 
         glUseProgram(self.shader.program)
-        glDrawElements(GL_TRIANGLES, int(self.vbos[0].data_count), GL_UNSIGNED_INT, None)
+        glDrawElements(GL_TRIANGLES, int(self.vbos[1].data_count), GL_UNSIGNED_INT, None)
 
         for attrib in range(self.attribs):
             if self.vbos[attrib].shader_ref != "":
                 att = glGetAttribLocation(self.shader.program, self.vbos[attrib].shader_ref)
                 glDisableVertexAttribArray(att)
         glBindVertexArray(0)
-
-        pg.display.flip()
 
     def destroy(self):
         glDeleteProgram(self.shader.program)

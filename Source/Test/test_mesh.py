@@ -11,16 +11,16 @@ class TestMesh:
         print(dir)
         self.vertices = (
             -1, -1, 0,
-            1, -1, 0,
             -1, 1, 0,
-            1, 1, 0
+            1, 1, 0,
+            1, -1, 0
         )
         self.indices = (
             0, 1, 2,
-            1, 2, 3
+            0, 2, 3
         )
         vertex_data = RenderData(self.vertices, 3, np.float32, "position")
-        index_data = RenderData(self.indices, 3, np.uint32, "")
+        index_data = RenderData(self.indices, 1, np.uint32, "")
         var_v = load(dir + "\External\Shaders\object_v.glsl")
         var_f = load(dir + "\\External\Shaders\object_f.glsl")
         shader = RenderShader(var_v, var_f)
