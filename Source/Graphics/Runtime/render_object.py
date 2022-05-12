@@ -22,10 +22,11 @@ class RenderShader:
         )
 
 class RenderData:
-    def __init__(self, data_array, size, type):
+    def __init__(self, data_array, size, type, shader_ref):
         self.size = size
         self.data_array = np.array(data_array, type)
         self.data_count = len(data_array) / size
+        self.shader_ref = shader_ref
 
 class RenderObject:
     def __init__(self):
@@ -57,8 +58,10 @@ class RenderObject:
     def render(self):
         glBindVertexArray(self.vao)
         for attrib in range(self.attribs):
-            glEnableVertexAttribArray(attrib)
-            glVertexAttribPointer(attrib, self.vbos[attrib].size, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(0))
+            if self.vbos[attrib].shader_ref != "":
+                att = glGetAttribLocation(self.shader.program, self.vbos[attrib].shader_ref)
+                glEnableVertexAttribArray(att)
+                glVertexAttribPointer(att, self.vbos[attrib].size, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
 
         glClear(GL_COLOR_BUFFER_BIT)
 
@@ -66,7 +69,9 @@ class RenderObject:
         glDrawElements(GL_TRIANGLES, int(self.vbos[0].data_count), GL_UNSIGNED_INT, None)
 
         for attrib in range(self.attribs):
-            glDisableVertexAttribArray(attrib)
+            if self.vbos[attrib].shader_ref != "":
+                att = glGetAttribLocation(self.shader.program, self.vbos[attrib].shader_ref)
+                glDisableVertexAttribArray(att)
         glBindVertexArray(0)
 
         pg.display.flip()

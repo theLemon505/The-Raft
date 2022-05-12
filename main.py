@@ -1,4 +1,3 @@
-import pygame as pg
 import os
 from Source.Utils.time import Time
 from Source.Io.display import Display
@@ -17,9 +16,7 @@ def main():
 
     print("the raft is building")
 
-    pg.init()
-    display = Display(540, 400, "test")
-    Time.delta_time = pg.time.Clock()
+    display = Display(540, 400, "The-Raft")
 
 
 main()

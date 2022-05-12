@@ -1,4 +1,4 @@
-pip install pygame
+pip install glfw
 pip install PyOpenGl
 pip install PyOpenGl_accelerate
 pip install psutil
