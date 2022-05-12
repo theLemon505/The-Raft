@@ -6,6 +6,8 @@ from sys import getsizeof
 from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 
+from Source.Core.Classes.overseer import Overseer
+
 class RenderShader:
     def __init__(self, vertex_path, fragment_path):
         with open(vertex_path, "r") as f:
@@ -14,12 +16,15 @@ class RenderShader:
         with open(fragment_path, "r") as f:
             self.fragment_src = f.readlines()
 
-        print(self.vertex_src)
-
         self.program = compileProgram(
             compileShader(self.vertex_src, GL_VERTEX_SHADER),
             compileShader(self.fragment_src, GL_FRAGMENT_SHADER)
         )
+
+    def upload_uniform(self, variable_name, data:np.matrix):
+        id = glGetUniformLocation(self.program, variable_name)
+        if id >= 0:
+            glUniformMatrix4fv(id, 1, GL_FALSE, data)
 
 class RenderData:
     def __init__(self, data_array, size, type, shader_ref):
@@ -53,9 +58,13 @@ class RenderObject:
         self.shader = shader
 
     def prepare(self):
+        self.overseer = Overseer()
         glUseProgram(self.shader.program)
 
     def render(self):
+        self.shader.upload_uniform("projection", self.overseer.camera.perspective_matrix)
+        self.shader.upload_uniform("view", self.overseer.camera.view_matrix)
+
         glBindVertexArray(self.vao)
         for attrib in range(self.attribs):
             if self.vbos[attrib].shader_ref != "":

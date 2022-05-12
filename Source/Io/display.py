@@ -8,11 +8,14 @@ from OpenGL.GL import *
 from Source.Test.test_mesh import TestMesh
 
 class Display:
+    width = None
+    height = None
+    title = ""
     def __init__(self, width, height, title):
         self.running = True
-        self.width = width
-        self.height = height
-        self.title = title
+        width = width
+        height = height
+        title = title
 
         if not glfw.init():
             raise Exception("glfw cannot be instantiated")

@@ -1,11 +1,11 @@
+from argparse import Namespace
 import sys
 import os
+
 dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(dir + "/Source/Graphics/Runtime")
 
-from .render_object import RenderObject
-from .render_object import RenderData
-from .render_object import RenderShader
+from ...Graphics.Runtime.render_object import RenderShader, RenderData, RenderObject
 
 class Eye:
     pass
